@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.mga.cheesechasers.Dessin
+    <com.mga.cheesechasers.Controller
         android:id="@+id/jeu"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
