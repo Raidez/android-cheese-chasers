@@ -15,6 +15,8 @@ public class Grille {
         //this.cartes[(int)(width/2)][(int)(height/2)] = new Carte(TypeCarte.SOURIS, app);
     }
 
+
+
     void draw(Canvas canvas, Paint paint) {
         for (int y = 0; y < this.height; y++) {
             canvas.drawLine(0.0f, (float) y * 10, 100.0f, (float) y * 10, paint);
