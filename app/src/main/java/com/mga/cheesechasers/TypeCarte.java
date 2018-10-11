@@ -1,5 +1,5 @@
 package com.mga.cheesechasers;
 
 public enum TypeCarte {
-    SOURIS, CHAT, FROMAGE, PIEGE;
+    VIDE, DISPONIBLE, SOURIS, SOURIS_INACTIVE, CHAT, FROMAGE, PIEGE, PIEGE_INACTIF;
 }
