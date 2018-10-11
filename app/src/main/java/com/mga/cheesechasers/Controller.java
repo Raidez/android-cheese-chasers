@@ -77,5 +77,7 @@ public class Controller extends View implements View.OnTouchListener{
 
         canvas.drawBitmap(bitmap, 10 - dx, 10 - dy, paint);
 
+        Grille grille = new Grille(5,5);
+        grille.draw(this, canvas, 20, 80, 90);
     }
 }
