@@ -26,10 +26,9 @@ public class Controller extends View implements View.OnTouchListener{
 
         Paint paint = new Paint();
         paint.setColor(Color.GREEN);
+        paint.setStrokeWidth(2.5f);
 
-        grille.draw(canvas,paint);
-        //this.getWidth();
-        //this.getHeight();
+        grille.draw(this, canvas,paint);
 
     }
 }
