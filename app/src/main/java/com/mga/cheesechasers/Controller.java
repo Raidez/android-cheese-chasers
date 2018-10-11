@@ -12,6 +12,8 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
+import static java.lang.Math.abs;
+
 public class Controller extends View implements View.OnTouchListener{
     private boolean mBooleanIsPressed = false;
 
@@ -67,17 +69,17 @@ public class Controller extends View implements View.OnTouchListener{
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        Paint paint = new Paint();
-        paint.setAntiAlias(true);
-        paint.setFilterBitmap(true);
-        paint.setDither(true);
-        Resources res = getResources();
-        Bitmap bitmap = BitmapFactory.decodeResource(res, R.drawable.cat);
+        Grille grille = new Grille(10,10);
+
+        Grille.x = Grille.x - dx;
+        Grille.y = Grille.y - dy;
+        if (Grille.x > 0) Grille.x = 0;
+        if (Grille.y > 0) Grille.y = 0;
+        //if (abs(Grille.x - grille.width) < this.getWidth()) Grille.x = abs(this.getWidth() - grille.width);
+        //if (abs(Grille.y - grille.height) < this.getHeight()) Grille.y = abs(this.getHeight() - grille.height);
 
 
-        canvas.drawBitmap(bitmap, 10 - dx, 10 - dy, paint);
+        grille.draw(this, canvas,  Grille.x,  Grille.y, 200);
 
-        Grille grille = new Grille(5,5);
-        grille.draw(this, canvas, 20, 80, 90);
     }
 }

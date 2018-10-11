@@ -15,6 +15,7 @@ import java.lang.reflect.Type;
 public class Grille {
     TypeCarte[][] cartes;
     int width, height;
+    static int x = 0, y = 0;
 
     Grille(int width, int height) {
         this.width = width;
