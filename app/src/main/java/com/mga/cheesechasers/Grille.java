@@ -31,7 +31,7 @@ public class Grille {
         for (int x = 0; x < width; x++) {
             this.cartes[x] = new TypeCarte[height];
             for (int y = 0; y < height; y++) {
-                this.cartes[x][y] = TypeCarte.SOURIS;
+                this.cartes[x][y] = TypeCarte.VIDE;
             }
         }
 
@@ -39,14 +39,6 @@ public class Grille {
         int x = (int) Math.floor(width / 2);
         int y = (int) Math.floor(height / 2);
         this.setAt(x, y, carteInitiale);
-        /*
-        for (int dx = (x - 1); dx <= (x + 1); dx++) {
-            for (int dy = (y - 1); dy <= (y + 1); dy++) {
-                this.cartes[dx][dy] = TypeCarte.DISPONIBLE;
-            }
-        }
-        this.cartes[x][y] = carteInitiale;
-        */
     }
 
     /**
@@ -136,13 +128,23 @@ public class Grille {
         // ajouter les nouvelles cases disponibles
         for (int dx = (x - 1); dx <= (x + 1); dx++) {
             for (int dy = (y - 1); dy <= (y + 1); dy++) {
-                TypeCarte c = this.cartes[dx][dy];
-                if (c == TypeCarte.VIDE) {
-                    this.cartes[dx][dy] = TypeCarte.DISPONIBLE;
+                if (dx >= 0 && dy >= 0 && dx < this.width && dy < this.height) {
+                    TypeCarte c = this.cartes[dx][dy];
+                    if (c == TypeCarte.VIDE) {
+                        this.cartes[dx][dy] = TypeCarte.DISPONIBLE;
+                    }
                 }
             }
         }
         this.cartes[x][y] = carte;
+    }
+
+    /**
+     * gestion de la logique du jeu
+     */
+    void gestionLogique() {
+        // les souris autour d'un chat sont désactivé
+        
     }
 
     /**
