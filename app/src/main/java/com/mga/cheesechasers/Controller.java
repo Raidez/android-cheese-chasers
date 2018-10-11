@@ -20,15 +20,7 @@ public class Controller extends View implements View.OnTouchListener{
 
     @Override
     protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-
         Grille grille = new Grille(5,5);
-
-        Paint paint = new Paint();
-        paint.setColor(Color.GREEN);
-        paint.setStrokeWidth(2.5f);
-
-        grille.draw(this, canvas,paint);
-
+        grille.draw(this, canvas, 20, 80, 90);
     }
 }
