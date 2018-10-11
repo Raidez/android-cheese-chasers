@@ -10,6 +10,8 @@ import android.graphics.Rect;
 import android.support.constraint.solver.widgets.Rectangle;
 import android.view.View;
 
+import java.lang.reflect.Type;
+
 public class Grille {
     TypeCarte[][] cartes;
     int width, height;
@@ -17,7 +19,13 @@ public class Grille {
     Grille(int width, int height) {
         this.width = width;
         this.height = height;
-        this.cartes = new TypeCarte[width][height];
+        this.cartes = new TypeCarte[width][];
+        for (int x = 0; x < width; x++) {
+            this.cartes[x] = new TypeCarte[height];
+            for (int y = 0; y < height; y++) {
+                this.cartes[x][y] = TypeCarte.VIDE;
+            }
+        }
     }
 
     void draw(View view, Canvas canvas, int dx, int dy, int tailleImage) {
@@ -34,9 +42,10 @@ public class Grille {
                 int leftPos = dx + x * tailleImage;
                 int topPos = dy + y * tailleImage;
                 Rect position = new Rect(leftPos, topPos, leftPos+tailleImage, topPos+tailleImage);
-                //Bitmap image = genererImage(view.getResources(), this.cartes[x][y]);
-                Bitmap image = genererImage(view.getResources(), TypeCarte.SOURIS);
-                canvas.drawBitmap(image, null, position, paint);
+                Bitmap image = genererImage(view.getResources(), this.cartes[x][y]);
+                if (image != null) {
+                    canvas.drawBitmap(image, null, position, paint);
+                }
             }
         }
 
