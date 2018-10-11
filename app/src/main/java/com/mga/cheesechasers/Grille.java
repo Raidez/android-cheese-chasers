@@ -139,6 +139,14 @@ public class Grille {
     }
 
     /**
+     * gestion de la logique du jeu
+     */
+    void gestionLogique() {
+        // les souris autour d'un chat sont désactivé
+        
+    }
+
+    /**
      * Récupère l'image selon le type de la carte
      * @param res
      * @param type
