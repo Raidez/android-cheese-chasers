@@ -27,7 +27,7 @@ public class Controller extends View implements View.OnTouchListener{
     public Controller(Context context, AttributeSet attrs){
         super(context, attrs);
         grille = new Grille(10, 10, TypeCarte.SOURIS);;
-        tailleImage = 90;
+        tailleImage = 200;
         dx = 20;
         dy = 90;
         this.setOnTouchListener(this);
@@ -71,6 +71,9 @@ public class Controller extends View implements View.OnTouchListener{
                 this.dx =  predx - x;
                 this.dy =   predy - y;
                 break;
+            /*case MotionEvent.ACTION_POINTER_DOWN: case MotionEvent.ACTION_POINTER_UP:
+                Log.d("POINTER", "Zoom...zooooom ");
+                break;*/
         }
         this.invalidate();
         return true;
@@ -84,8 +87,14 @@ public class Controller extends View implements View.OnTouchListener{
         Grille.y = Grille.y - dy;
         if (Grille.x > 0) Grille.x = 0;
         if (Grille.y > 0) Grille.y = 0;
-        //if (abs(Grille.x - grille.width) < this.getWidth()) Grille.x = abs(this.getWidth() - grille.width);
-        //if (abs(Grille.y - grille.height) < this.getHeight()) Grille.y = abs(this.getHeight() - grille.height);
+        //Log.d("WIDTH", "View width : "+this.getWidth()+" | Grille x : "+abs(Grille.x)+" | Grille width : "+(grille.width * tailleImage));
+        //Log.d("HEIGHT", "View height : "+this.getHeight()+" | Grille y : "+abs(Grille.y)+" | Grille height : "+(grille.width * tailleImage));
+        if (abs(Grille.x) + this.getWidth() > (grille.width * tailleImage)) {
+            Grille.x = abs((grille.width * tailleImage) - this.getWidth());
+        }
+        if (abs(Grille.y) + this.getHeight() > (grille.width * tailleImage)) {
+            Grille.y = abs((grille.width * tailleImage) - this.getHeight());
+        }
 
 
         grille.draw(this, canvas,  Grille.x,  Grille.y, tailleImage);
