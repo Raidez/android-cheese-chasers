@@ -17,7 +17,7 @@ public class Controller extends View implements View.OnTouchListener{
 
     public Controller(Context context, AttributeSet attrs){
         super(context, attrs);
-        grille = new Grille(10, 10, TypeCarte.SOURIS);
+        grille = new Grille(5, 5, TypeCarte.SOURIS);
         this.setOnTouchListener(this);
     }
 
