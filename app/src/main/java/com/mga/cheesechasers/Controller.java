@@ -36,7 +36,6 @@ public class Controller extends View implements View.OnTouchListener{
     public boolean onTouch(View v, MotionEvent event) {
         int x = (int) event.getRawX();
         int y = (int) event.getRawY();
-        Log.d(" TOUCH" , "TOUCH");
         switch (event.getAction() & MotionEvent.ACTION_MASK) {
             case MotionEvent.ACTION_DOWN:
                 Log.d(" TOUCH" , "DOWN");
