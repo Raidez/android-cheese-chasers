@@ -25,23 +25,16 @@ public class Controller extends View implements View.OnTouchListener {
 
     public Controller(Context context, AttributeSet attrs){
         super(context, attrs);
-        grille = new Grille(10, 10, TypeCarte.SOURIS);;
-        tailleImage = 200;
-        dx = 20;
-        dy = 90;
+        //grille = new Grille(10, 10, TypeCarte.SOURIS);;
+        tailleImage = 100;
+        dx = 0;
+        dy = 0;
         this.setOnTouchListener(this);
 
         pile = new Pile();
-        grille = new Grille(5, 5, pile.pioche());
+        grille = new Grille(10, 10, pile.pioche());
         prochaineCarte = pile.pioche();
     }
-
-    private final Handler handler = new Handler();
-    private final Runnable runnable = new Runnable() {
-        public void run() {
-            Log.d(" HANDLER" , "log LONG TOUCH");
-        }
-    };
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
@@ -51,34 +44,25 @@ public class Controller extends View implements View.OnTouchListener {
             case MotionEvent.ACTION_DOWN:
                 Log.d(" TOUCH", "DOWN");
                 // Execute your Runnable after 1000 milliseconds = 1 second.
-                handler.postDelayed(runnable, 1000);
-                mBooleanIsPressed = true;
-
                 predx = x;
                 predy = y;
 
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    Grille.Carte carte = grille.getAt((int) event.getX(), (int) event.getY(), dx, dy, tailleImage);
-                    if (carte.type == TypeCarte.DISPONIBLE) {
-                        TypeCarte actuelle = prochaineCarte;
-                        grille.setAt(carte.x, carte.y, actuelle);
-                        prochaineCarte = pile.pioche();
-                        grille.gestionLogique();
-                    }
+                Grille.Carte carte = grille.getAt((int) event.getX(), (int) event.getY(), dx, dy, tailleImage);
+                if (carte.type == TypeCarte.DISPONIBLE) {
+                    TypeCarte actuelle = prochaineCarte;
+                    grille.setAt(carte.x, carte.y, actuelle);
+                    prochaineCarte = pile.pioche();
+                    grille.gestionLogique();
                 }
                 break;
             case MotionEvent.ACTION_UP:
-                if (mBooleanIsPressed) {
-                    mBooleanIsPressed = false;
-                    handler.removeCallbacks(runnable);
-                }
                 Log.d(" TOUCH", "UP");
                 break;
-            case MotionEvent.ACTION_MOVE:
+            /*case MotionEvent.ACTION_MOVE:
                 Log.d(" TOUCH", "MOVE");
                 this.dx = predx - x;
                 this.dy = predy - y;
-                break;
+                break;*/
             /*case MotionEvent.ACTION_POINTER_DOWN: case MotionEvent.ACTION_POINTER_UP:
                 Log.d("POINTER", "Zoom...zooooom ");
                 break;*/
@@ -91,7 +75,7 @@ public class Controller extends View implements View.OnTouchListener {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        Grille.x = Grille.x - dx;
+        /*Grille.x = Grille.x - dx;
         Grille.y = Grille.y - dy;
         if (Grille.x > 0) Grille.x = 0;
         if (Grille.y > 0) Grille.y = 0;
@@ -102,7 +86,7 @@ public class Controller extends View implements View.OnTouchListener {
         }
         if (abs(Grille.y) + this.getHeight() > (grille.width * tailleImage)) {
             Grille.y = abs((grille.width * tailleImage) - this.getHeight());
-        }
+        }*/
 
 
         grille.draw(this, canvas,  Grille.x,  Grille.y, tailleImage);
