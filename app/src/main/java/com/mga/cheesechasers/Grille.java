@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.support.constraint.solver.widgets.Rectangle;
+import android.util.Log;
 import android.view.View;
 
 import java.lang.reflect.Type;
@@ -16,7 +17,7 @@ public class Grille {
     TypeCarte[][] cartes;
     int width, height;
 
-    Grille(int width, int height) {
+    Grille(int width, int height, TypeCarte carteInitiale) {
         this.width = width;
         this.height = height;
         this.cartes = new TypeCarte[width][];
@@ -26,6 +27,16 @@ public class Grille {
                 this.cartes[x][y] = TypeCarte.VIDE;
             }
         }
+
+        // génération des cartes de base
+        int x = (int) Math.floor(width / 2);
+        int y = (int) Math.floor(height / 2);
+        for (int dx = (x - 1); dx <= (x + 1); dx++) {
+            for (int dy = (y - 1); dy <= (y + 1); dy++) {
+                this.cartes[dx][dy] = TypeCarte.DISPONIBLE;
+            }
+        }
+        this.cartes[x][y] = carteInitiale;
     }
 
     void draw(View view, Canvas canvas, int dx, int dy, int tailleImage) {
@@ -63,11 +74,39 @@ public class Grille {
         }
     }
 
+    public static class Carte {
+        int x;
+        int y;
+        TypeCarte type;
+    }
+
+    Carte getAt(int x, int y, int dx, int dy, int tailleImage) {
+        int tx = (x - dx) / tailleImage;
+        int ty = (y - dy) / tailleImage;
+
+        Carte carte = new Carte();
+        carte.x = tx;
+        carte.y = ty;
+        carte.type = this.cartes[tx][ty];
+
+        return carte;
+    }
+
+    void setAt(int x , int y, TypeCarte carte) {
+        this.cartes[x][y] = carte;
+    }
+
     Bitmap genererImage(Resources res, TypeCarte type) {
         Bitmap image = null;
         switch (type) {
+            case DISPONIBLE:
+                image = BitmapFactory.decodeResource(res, R.drawable.plus);
+                break;
             case SOURIS:
                 image = BitmapFactory.decodeResource(res, R.drawable.mouse);
+                break;
+            case SOURIS_INACTIVE:
+                image = BitmapFactory.decodeResource(res, R.drawable.mouseinvalidated);
                 break;
             case CHAT:
                 image = BitmapFactory.decodeResource(res, R.drawable.cat);
@@ -77,6 +116,9 @@ public class Grille {
                 break;
             case PIEGE:
                 image = BitmapFactory.decodeResource(res, R.drawable.mousetrap);
+                break;
+            case PIEGE_INACTIF:
+                image = BitmapFactory.decodeResource(res, R.drawable.mousetrapinvalidated);
                 break;
         }
 
