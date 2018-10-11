@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.support.constraint.solver.widgets.Rectangle;
+import android.util.Log;
 import android.view.View;
 
 import java.lang.reflect.Type;
@@ -17,7 +18,13 @@ public class Grille {
     int width, height;
     static int x = 0, y = 0;
 
-    Grille(int width, int height) {
+    /**
+     * Construit une tableau pour représenter la grille et les cartes
+     * @param width longueur de la grille
+     * @param height largeur de la grille
+     * @param carteInitiale carte centrée au milieu de la grille avec 8 cases disponibles autour
+     */
+    Grille(int width, int height, TypeCarte carteInitiale) {
         this.width = width;
         this.height = height;
         this.cartes = new TypeCarte[width][];
@@ -27,15 +34,33 @@ public class Grille {
                 this.cartes[x][y] = TypeCarte.SOURIS;
             }
         }
+
+        // génération des cartes de base
+        int x = (int) Math.floor(width / 2);
+        int y = (int) Math.floor(height / 2);
+        this.setAt(x, y, carteInitiale);
+        /*
+        for (int dx = (x - 1); dx <= (x + 1); dx++) {
+            for (int dy = (y - 1); dy <= (y + 1); dy++) {
+                this.cartes[dx][dy] = TypeCarte.DISPONIBLE;
+            }
+        }
+        this.cartes[x][y] = carteInitiale;
+        */
     }
 
+    /**
+     * Dessine la grille et les cartes à la position dx, dy
+     * @param view
+     * @param canvas
+     * @param dx position du tableau sur l'écran
+     * @param dy position du tableau sur l'écran
+     * @param tailleImage taille en pixel d'une case
+     */
     void draw(View view, Canvas canvas, int dx, int dy, int tailleImage) {
         Paint paint = new Paint();
         paint.setColor(Color.BLACK);
         paint.setStrokeWidth(2f);
-
-        int maxWidth = view.getWidth();
-        int maxHeight = view.getHeight();
 
         // affichage de la carte correspondante
         for (int x = 0; x < this.width; x++) {
@@ -64,11 +89,79 @@ public class Grille {
         }
     }
 
+    public static class Carte {
+        int x;
+        int y;
+        TypeCarte type;
+    }
+
+    /**
+     * Récupère le type de la case sur l'écran
+     * @param x
+     * @param y
+     * @param dx
+     * @param dy
+     * @param tailleImage
+     * @return
+     */
+    Carte getAt(int x, int y, int dx, int dy, int tailleImage) {
+        int tx = (x - dx) / tailleImage;
+        int ty = (y - dy) / tailleImage;
+
+        Carte carte = new Carte();
+        carte.x = tx;
+        carte.y = ty;
+        carte.type = this.cartes[tx][ty];
+
+        return carte;
+    }
+
+    /**
+     * Modifie une carte à une position tout en gérant l'ensemble des règles de gestion du jeu
+     * @param x
+     * @param y
+     * @param carte
+     */
+    void setAt(int x , int y, TypeCarte carte) {
+        // enlever toutes les cases disponibles
+        for (int dx = 0; dx < this.width; dx++) {
+            for (int dy = 0; dy < this.height; dy++) {
+                TypeCarte c = this.cartes[dx][dy];
+                if (c == TypeCarte.DISPONIBLE) {
+                    this.cartes[dx][dy] = TypeCarte.VIDE;
+                }
+            }
+        }
+
+        // ajouter les nouvelles cases disponibles
+        for (int dx = (x - 1); dx <= (x + 1); dx++) {
+            for (int dy = (y - 1); dy <= (y + 1); dy++) {
+                TypeCarte c = this.cartes[dx][dy];
+                if (c == TypeCarte.VIDE) {
+                    this.cartes[dx][dy] = TypeCarte.DISPONIBLE;
+                }
+            }
+        }
+        this.cartes[x][y] = carte;
+    }
+
+    /**
+     * Récupère l'image selon le type de la carte
+     * @param res
+     * @param type
+     * @return
+     */
     Bitmap genererImage(Resources res, TypeCarte type) {
         Bitmap image = null;
         switch (type) {
+            case DISPONIBLE:
+                image = BitmapFactory.decodeResource(res, R.drawable.plus);
+                break;
             case SOURIS:
                 image = BitmapFactory.decodeResource(res, R.drawable.mouse);
+                break;
+            case SOURIS_INACTIVE:
+                image = BitmapFactory.decodeResource(res, R.drawable.mouseinvalidated);
                 break;
             case CHAT:
                 image = BitmapFactory.decodeResource(res, R.drawable.cat);
@@ -78,6 +171,9 @@ public class Grille {
                 break;
             case PIEGE:
                 image = BitmapFactory.decodeResource(res, R.drawable.mousetrap);
+                break;
+            case PIEGE_INACTIF:
+                image = BitmapFactory.decodeResource(res, R.drawable.mousetrapinvalidated);
                 break;
         }
 

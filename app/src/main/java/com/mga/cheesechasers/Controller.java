@@ -17,13 +17,19 @@ import static java.lang.Math.abs;
 public class Controller extends View implements View.OnTouchListener{
     private boolean mBooleanIsPressed = false;
 
+    Grille grille;
     int dx = 0;
     int dy = 0;
     int predx;
     int predy;
+    int tailleImage;
 
     public Controller(Context context, AttributeSet attrs){
         super(context, attrs);
+        grille = new Grille(10, 10, TypeCarte.SOURIS);;
+        tailleImage = 90;
+        dx = 20;
+        dy = 90;
         this.setOnTouchListener(this);
     }
 
@@ -47,6 +53,11 @@ public class Controller extends View implements View.OnTouchListener{
 
                 predx = x;
                 predy = y;
+
+                Grille.Carte carte = grille.getAt((int) event.getX(), (int) event.getY(), dx, dy, tailleImage);
+                if (carte.type == TypeCarte.DISPONIBLE) {
+                    grille.setAt(carte.x, carte.y, TypeCarte.FROMAGE);
+                }
                 break;
             case MotionEvent.ACTION_UP:
                 if(mBooleanIsPressed) {
@@ -69,8 +80,6 @@ public class Controller extends View implements View.OnTouchListener{
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        Grille grille = new Grille(10,10);
-
         Grille.x = Grille.x - dx;
         Grille.y = Grille.y - dy;
         if (Grille.x > 0) Grille.x = 0;
@@ -79,7 +88,6 @@ public class Controller extends View implements View.OnTouchListener{
         //if (abs(Grille.y - grille.height) < this.getHeight()) Grille.y = abs(this.getHeight() - grille.height);
 
 
-        grille.draw(this, canvas,  Grille.x,  Grille.y, 200);
-
+        grille.draw(this, canvas,  Grille.x,  Grille.y, tailleImage);
     }
 }
